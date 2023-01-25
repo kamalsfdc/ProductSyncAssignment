@@ -1,6 +1,5 @@
 public class ProductProcessBatch implements Database.Batchable<sObject> {
     String query='';
-   
     public ProductProcessBatch(String query){
         if(query!=''){
            this.query=query;
@@ -14,6 +13,9 @@ public class ProductProcessBatch implements Database.Batchable<sObject> {
      }
     
     public void execute(Database.BatchableContext BC, List<SQX_Part__c> partsList){
+         Id SYS_ADMIN_PROFILE_ID = [select ProfileId from User where Profile.Name = 'System Administrator'].ProfileId;
+
+         If(UserInfo.getProfileId() == SYS_ADMIN_PROFILE_ID ){
          List<String> partNameList=new List<String>();
          List<String> partCodeList=new List<String>();
            
@@ -55,12 +57,11 @@ public class ProductProcessBatch implements Database.Batchable<sObject> {
              }
          }
         
-       
-        
          if(!updatedPartsList.isEmpty()){
            update updatedPartsList;
         }
     }
+  }
 
    public void finish(Database.BatchableContext BC){
    }
