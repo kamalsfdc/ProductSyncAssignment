@@ -1,0 +1,36 @@
+@isTest
+public class ProductProcessBatchTest {
+    
+    
+    @isTest
+    static void ProductProcessBatchWithoutProductTest() {
+        List<SQX_Part__c> partsList=new List<SQX_Part__c>();
+        SQX_Part__c part1=new SQX_Part__c();
+        part1.Name='Part 1';
+        part1.Part_Number__c='12345';
+        partsList.add(part1);
+        
+        SQX_Part__c part2=new SQX_Part__c();
+        part2.Name='Part 2';
+        part2.Part_Number__c='12345D';
+        partsList.add(part2);
+        insert partsList;
+        
+        Test.startTest();
+            ProductProcessBatch obj = new ProductProcessBatch('');
+            DataBase.executeBatch(obj);   
+        Test.stopTest();
+        
+         List<SQX_Part__c> partsResultList=[select Id,Name,Part_Number__c,Active__c,Product__c from SQX_Part__c];
+         SQX_Part__c partResul0=partsResultList.get(0);
+         Assert.isNotNull(partResul0);
+         Assert.isNotNull(partResul0.Product__c);
+    }
+    
+    
+    
+    
+    
+    
+    
+}
